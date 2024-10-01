@@ -7,15 +7,19 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import se331.lab.entity.Event;
 import se331.lab.entity.Organizer;
+import se331.lab.entity.Participant;
 import se331.lab.repository.EventRepository;
 import se331.lab.repository.OrganizerRepository;
+import se331.lab.repository.ParticipantRepository;
+
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
 public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
     final EventRepository eventRepository;
-
     final OrganizerRepository organizerRepository;
+    final ParticipantRepository participantRepository;
     @Override
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
@@ -26,6 +30,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .name("CMU").build());
         org3=organizerRepository.save(Organizer.builder()
                 .name("Chiangmai").build());
+
         Event tempEvent;
         tempEvent=eventRepository.save(Event.builder()
                 .category("Academic")
@@ -61,6 +66,17 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
         tempEvent.setOrganizer(org3);
         org3.getOwnEvents().add(tempEvent);
 
+
+        //create participants
+
+        Participant p1=participantRepository.save(Participant.builder().name("Alice").build());
+        Participant p2=participantRepository.save(Participant.builder().name("Gloria").build());
+        Participant p3=participantRepository.save(Participant.builder().name("Rubi").build());
+        Participant p4=participantRepository.save(Participant.builder().name("Ruth").build());
+        Participant p5=participantRepository.save(Participant.builder().name("Emerald").build());
+
+        tempEvent.setParticipants(Arrays.asList(p1,p2,p3));
+        eventRepository.save(tempEvent);
 
     }
 
